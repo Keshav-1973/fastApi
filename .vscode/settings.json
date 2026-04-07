@@ -1,0 +1,18 @@
+{
+  "cSpell.words": [
+    "autoflush",
+    "dotenv",
+    "fastapi",
+    "passlib",
+    "pymongo",
+    "sessionmaker",
+    "uvicorn"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  }
+}
