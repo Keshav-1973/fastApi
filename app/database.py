@@ -36,7 +36,24 @@ def _ensure_users_email_uniqueness(database: Database) -> None:
         logger.warning("Could not create unique index uniq_email_normalized: %s", exc)
 
 
+def _ensure_refresh_token_indexes(database: Database) -> None:
+    refresh_tokens = database["refresh_tokens"]
+
+    index_specs = [
+        (("tokenHash", 1), {"unique": True, "name": "uniq_refresh_token_hash"}),
+        (("userId", 1), {"name": "idx_refresh_tokens_user_id"}),
+        (("expiresAt", 1), {"expireAfterSeconds": 0, "name": "ttl_refresh_tokens_expires_at"}),
+    ]
+
+    for field, options in index_specs:
+        try:
+            refresh_tokens.create_index([field], **options)
+        except OperationFailure as exc:
+            logger.warning("Could not create refresh token index %s: %s", options["name"], exc)
+
+
 _ensure_users_email_uniqueness(db)
+_ensure_refresh_token_indexes(db)
 
 
 def get_db() -> Generator[Database, None, None]:

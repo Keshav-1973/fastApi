@@ -17,6 +17,7 @@ MONGODB_DB_NAME=fastapi_db
 SECRET_KEY=change_me_to_a_long_random_secret
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
+REFRESH_TOKEN_EXPIRE_DAYS=30
 ```
 
 If you use MongoDB Atlas, set `MONGODB_URL` to your Atlas connection string.
@@ -36,7 +37,11 @@ uvicorn app.main:app --reload
 
 - `POST /auth/register`
 - `POST /auth/login`
+- `POST /auth/refresh`
+- `POST /auth/logout`
 - `GET /users/me`
+- `GET /users/profile`
+- `PATCH /users/profile`
 - `GET /users/{user_id}`
 
 ## 6. Deploy to Google Cloud Run
@@ -85,6 +90,7 @@ MONGODB_DB_NAME: "fastapi_db"
 SECRET_KEY: "long-random-secret"
 ALGORITHM: "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES: "60"
+REFRESH_TOKEN_EXPIRE_DAYS: "30"
 ```
 
 ### Common operations
