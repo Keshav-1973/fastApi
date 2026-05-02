@@ -62,6 +62,20 @@ class CarDetailsFormData(BaseModel):
     description: str
 
 
+class CarDetailsDocumentData(BaseModel):
+    """Stored car details returned by read endpoints"""
+
+    car: CarDetails
+    vehicleType: Optional[DropDownItem] = None
+    fuelType: DropDownItem
+    transmission: DropDownItem
+    year: str
+    kilometersDriven: str
+    numberOfOwners: DropDownItem
+    adTitle: str
+    description: str
+
+
 class AddPhotosFormData(BaseModel):
     """Second form: Images for the listing"""
 
@@ -106,7 +120,7 @@ class CarListingDocument(BaseModel):
     """Stored car listing returned by read endpoints"""
 
     id: str
-    carDetails: CarDetailsFormData
+    carDetails: CarDetailsDocumentData
     photos: AddPhotosFormData
     additionalDetails: AdditionalDetailsFormData
     ownerId: str

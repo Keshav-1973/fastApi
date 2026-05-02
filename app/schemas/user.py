@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
+from typing import Optional
 
 
 # What client sends to register
@@ -28,3 +29,18 @@ class LoginRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class ProfileResponse(BaseModel):
+    id: str
+    name: str
+    email: EmailStr
+    phoneNumber: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProfileUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phoneNumber: Optional[str] = None
