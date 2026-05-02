@@ -77,4 +77,4 @@ def decode_token(token: str) -> dict:
         return payload
 
     except JWTError:
-        raise Exception("Invalid or expired token")
+        raise ValueError("Invalid or expired token")

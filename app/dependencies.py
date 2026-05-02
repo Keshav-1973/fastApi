@@ -14,6 +14,13 @@ def get_current_user(
 ):
     try:
         payload = decode_token(token)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token"
+        )
+
+    try:
         user_id = payload.get("sub")
         object_id = ObjectId(user_id)
     except (TypeError, InvalidId, ValueError):
