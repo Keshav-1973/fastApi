@@ -29,8 +29,8 @@ uvicorn app.main:app --reload
 
 ## 4. Swagger docs
 
-- Swagger UI: `http://127.0.0.1:8000/docs`
-- ReDoc: `http://127.0.0. 1:8000/redoc`
+- Swagger UI: `https://fastapi-app-746496873789.asia-south1.run.app/docs`
+- ReDoc: `https://fastapi-app-746496873789.asia-south1.run.app/redoc`
 
 ## 5. Available auth routes
 
