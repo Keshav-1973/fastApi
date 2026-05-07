@@ -12,6 +12,7 @@ from app.schemas.car_listing import (
     CarListingListResponse,
     CarListingRequest,
     CarListingResponse,
+    CarListingWithOwnerResponse,
 )
 
 router = APIRouter(prefix="/car-listings", tags=["Car Listings"])
@@ -129,6 +130,63 @@ def get_other_users_listings(
         response.append(listing)
 
     return {"count": len(response), "items": response}
+
+
+@router.get("/others/{listing_id}", response_model=CarListingWithOwnerResponse)
+def get_other_user_listing_by_id(
+    listing_id: str,
+    db: Database = Depends(get_db),
+    current_user: dict[str, Any] = Depends(get_current_user),
+):
+    """
+    Retrieve one active listing by ID created by another user, including owner details.
+    """
+    listings: Collection[dict[str, Any]] = db["car_listings"]
+    users: Collection[dict[str, Any]] = db["users"]
+
+    try:
+        listing_obj_id = ObjectId(listing_id)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid listing ID",
+        )
+
+    listing = listings.find_one(
+        {
+            "_id": listing_obj_id,
+            "ownerId": {"$ne": current_user["id"]},
+            "status": "active",
+        }
+    )
+    if not listing:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Listing not found",
+        )
+
+    owner = None
+    try:
+        owner = users.find_one({"_id": ObjectId(listing["ownerId"])})
+    except Exception:
+        owner = None
+
+    if not owner:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Owner not found",
+        )
+
+    listing["id"] = str(listing["_id"])
+    del listing["_id"]
+    listing["ownerDetails"] = {
+        "ownerId": listing["ownerId"],
+        "ownerEmail": listing.get("ownerEmail") or owner.get("email", ""),
+        "name": owner.get("name") or owner.get("username", ""),
+        "phoneNumber": owner.get("phoneNumber"),
+    }
+
+    return listing
 
 
 @router.get("/{listing_id}", response_model=CarListingDocument)

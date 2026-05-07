@@ -129,6 +129,27 @@ class CarListingDocument(BaseModel):
     status: str
 
 
+class OwnerDetails(BaseModel):
+    """Owner profile fields returned with listing details"""
+
+    ownerId: str
+    ownerEmail: str
+    name: str
+    phoneNumber: Optional[str] = None
+
+
+class CarListingWithOwnerResponse(BaseModel):
+    """Listing details enriched with owner contact information"""
+
+    id: str
+    carDetails: CarDetailsDocumentData
+    photos: AddPhotosFormData
+    additionalDetails: AdditionalDetailsFormData
+    createdAt: datetime
+    status: str
+    ownerDetails: OwnerDetails
+
+
 class CarListingListResponse(BaseModel):
     """Response for listing collection endpoints"""
 
